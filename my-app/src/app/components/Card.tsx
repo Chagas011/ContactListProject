@@ -4,6 +4,7 @@ import { Edit, Trash } from "lucide-react";
 import Link from "next/link";
 import { useContact } from "../hooks/useContact";
 import { Contatos } from "../types/contact";
+import { useState } from "react";
 
 export interface CardProps {
   contatos: Contatos[];
@@ -11,12 +12,41 @@ export interface CardProps {
 
 export default function Card(props: CardProps) {
   const { handleDeleteConfirm } = useContact();
+  const [search, setSearch] = useState("");
+  const filteredContacts = props.contatos.filter((contato) =>
+    contato.name.toLowerCase().includes(search.toLowerCase())
+  );
+  const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+  };
   return (
     <div className="w-full h-full">
-      {props.contatos.map((contato) => (
+      <form action="" className=" flex mt-[48px] justify-center">
+        <input
+          value={search}
+          type="text"
+          placeholder="Pesquise pelo nome..."
+          onChange={handleChangeSearch}
+          className="border border-zinc-700 rounded-2xl p-2 md:w-96 w-80"
+        />
+      </form>
+      <div className="mt-8 w-full">
+        <div className="flex flex-row justify-between">
+          <span className="p-2 text-xl font-semibold">
+            {filteredContacts.length} Contatos
+          </span>
+          <Link
+            href="/novo"
+            className="grid items-center border border-purple-950 rounded-lg hover:bg-purple-800 hover:text-white w-[150px] text-center text-purple-600 "
+          >
+            Novo Contato
+          </Link>
+        </div>
+      </div>
+      {filteredContacts.map((contato) => (
         <div
           key={contato.id}
-          className="flex flex-col p-2 w-full h-[90px] border border-zinc-600 mt-[15px] rounded-2xl"
+          className="flex flex-col p-2 w-full border border-zinc-600 mt-[15px] rounded-2xl"
         >
           <div className="flex flex-row justify-between">
             <div className="flex flex-row gap-3">

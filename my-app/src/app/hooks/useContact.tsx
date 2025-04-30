@@ -5,8 +5,10 @@ import { schemeFormContact } from "../types/scheme";
 import { toast } from "react-toastify";
 import { api } from "../services/api";
 import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export const useContact = () => {
+  const router = useRouter();
   const {
     handleSubmit,
     register,
@@ -18,7 +20,7 @@ export const useContact = () => {
     mode: "all",
     resolver: zodResolver(schemeFormContact),
     defaultValues: {
-      categoria: "",
+      categoria: "INSTAGRAM",
       email: "",
       name: "",
       phone: "",
@@ -47,6 +49,7 @@ export const useContact = () => {
         closeButton: true,
       });
       reset();
+      router.push("/");
     } catch (err) {
       toast.error(`${err}`, {
         position: "top-center",
@@ -77,6 +80,7 @@ export const useContact = () => {
         draggable: false,
         closeButton: true,
       });
+      router.push("/");
     } catch (err) {
       toast.error(`${err}`, {
         position: "top-center",
